@@ -32,6 +32,7 @@ public class IndexController implements Initializable{
 	@FXML
 	public void onMitDepartmentAction() {
 		System.out.println("Department menu item click!");
+		ViewController.loadView("/gui/DepartmentView.fxml", "Departments");
 	}
 	
 	@FXML
