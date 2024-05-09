@@ -1,8 +1,7 @@
-package gui;
+package gui.utils;
 
 import java.io.IOException;
 
-import gui.utils.AlertController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;

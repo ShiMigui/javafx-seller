@@ -1,6 +1,6 @@
 package application;
 
-import gui.ViewController;
+import gui.utils.ViewController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
