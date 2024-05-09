@@ -36,5 +36,6 @@ public class IndexController implements Initializable{
 	@FXML
 	public void onMitAboutAction() {
 		System.out.println("About menu item click!");
+		ViewController.loadView("/gui/AboutView.fxml", "About");
 	}
 }
