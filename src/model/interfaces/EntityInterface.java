@@ -1,4 +1,4 @@
-package model.entities;
+package model.interfaces;
 
 public interface EntityInterface {
 	void setId(Integer id);

@@ -14,7 +14,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import model.entities.Department;
-import model.services.DepartmentJPAService;
+import model.interfaces.DepartmentJPAService;
 
 public class DepartmentController implements Initializable {
 	private DepartmentJPAService service;

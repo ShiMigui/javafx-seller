@@ -3,6 +3,8 @@ package model.entities;
 import java.io.Serializable;
 import java.util.Objects;
 
+import model.interfaces.EntityInterface;
+
 public class Department implements EntityInterface, Serializable {
 	private static final long serialVersionUID = 1L;
 	

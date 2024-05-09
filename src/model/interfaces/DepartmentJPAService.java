@@ -1,9 +1,10 @@
-package model.services;
+package model.interfaces;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import model.entities.Department;
+import model.services.JPAServiceInterface;
 
 public class DepartmentJPAService implements JPAServiceInterface<Department> {
 
