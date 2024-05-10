@@ -14,10 +14,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import model.entities.Department;
-import model.interfaces.DepartmentJPAService;
+import model.services.DepartmentService;
 
 public class DepartmentController implements Initializable {
-	private DepartmentJPAService service;
+	private DepartmentService service;
 
 	@FXML
 	private Button btnNew;
@@ -44,7 +44,7 @@ public class DepartmentController implements Initializable {
 
 		tb.prefHeightProperty().bind(ViewController.getStage().heightProperty());
 		
-		setDepartmentJPAService(new DepartmentJPAService());
+		setDepartmentJPAService(new DepartmentService());
 		updateTb();
 	}
 
@@ -64,7 +64,7 @@ public class DepartmentController implements Initializable {
 		tb.setItems(obs);
 	}
 
-	private void setDepartmentJPAService(DepartmentJPAService service) {
+	private void setDepartmentJPAService(DepartmentService service) {
 		this.service = service;
 	}
 }

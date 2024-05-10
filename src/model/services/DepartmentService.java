@@ -1,12 +1,12 @@
-package model.interfaces;
+package model.services;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import model.entities.Department;
-import model.services.JPAServiceInterface;
+import model.interfaces.IEntityService;
 
-public class DepartmentJPAService implements JPAServiceInterface<Department> {
+public class DepartmentService implements IEntityService<Department> {
 
 	@Override
 	public List<Department> findAll() {
