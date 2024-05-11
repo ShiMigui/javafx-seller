@@ -1,6 +1,6 @@
 package model.interfaces;
 
-public interface EntityInterface {
+public interface IEntity {
 	void setId(Integer id);
 
 	Integer getId();

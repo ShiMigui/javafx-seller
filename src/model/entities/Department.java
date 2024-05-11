@@ -3,9 +3,9 @@ package model.entities;
 import java.io.Serializable;
 import java.util.Objects;
 
-import model.interfaces.EntityInterface;
+import model.interfaces.IEntity;
 
-public class Department implements EntityInterface, Serializable {
+public class Department implements IEntity, Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public Integer id;
@@ -54,5 +54,10 @@ public class Department implements EntityInterface, Serializable {
 			return false;
 		Department other = (Department) obj;
 		return Objects.equals(id, other.id);
+	}
+
+	@Override
+	public String toString() {
+		return "Department [id=" + id + ", name=" + name + "]";
 	}
 }
