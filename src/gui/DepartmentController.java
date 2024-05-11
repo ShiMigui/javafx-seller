@@ -1,4 +1,4 @@
-package gui.pages;
+package gui;
 
 import java.io.IOException;
 import java.net.URL;
@@ -60,8 +60,8 @@ public class DepartmentController implements Initializable {
     @FXML
     public void onBtnNewAction() {
 	try {
-	    Stage window = WindowManager.createModalWindow("/gui/pages/DepartmentFormModalView.fxml",
-		    "Novo departamento!", MainViewManager.getStage());
+	    Stage window = WindowManager.createModalWindow("/gui/windows/DepartmentFormModalView.fxml",
+		    "Novo departamento", MainViewManager.getStage());
 	    window.showAndWait();
 	} catch (IOException e) {
 	    AlertBuilder.type(AlertType.ERROR).title("Erro ao tentar carregar recurso").content(e.getMessage());

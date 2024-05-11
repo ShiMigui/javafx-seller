@@ -33,7 +33,7 @@ public class IndexController implements Initializable {
     @FXML
     public void onMitDepartmentAction() {
 	try {
-	    MainViewManager.loadViewInIndex("/gui/pages/DepartmentView.fxml", "Departments");
+	    MainViewManager.loadViewInIndex("/gui/DepartmentView.fxml", "Departments");
 	} catch (IOException e) {
 	    AlertBuilder.type(AlertType.ERROR).title("Erro ao tentar carregar recurso").content(e.getMessage());
 	}
@@ -42,7 +42,7 @@ public class IndexController implements Initializable {
     @FXML
     public void onMitAboutAction() {
 	try {
-	    MainViewManager.loadViewInIndex("/gui/pages/AboutView.fxml", "About");
+	    MainViewManager.loadViewInIndex("/gui/AboutView.fxml", "About");
 	} catch (IOException e) {
 	    AlertBuilder.type(AlertType.ERROR).title("Erro ao tentar carregar recurso").content(e.getMessage());
 	}
