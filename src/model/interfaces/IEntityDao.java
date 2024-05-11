@@ -6,7 +6,7 @@ import java.util.List;
 public interface IEntityDao<E> {
 	E convert(ResultSet rs);
 
-	E finById(Integer id);
+	E findById(Integer id);
 
 	void insert(E obj);
 

@@ -32,7 +32,7 @@ public class DepartmentDao implements IEntityDao<Department> {
 	}
 
 	@Override
-	public Department finById(Integer id) {
+	public Department findById(Integer id) {
 		try {
 			st = con.prepareStatement("SELECT nm_department FROM DEPARTMENT WHERE cd_department = ?;");
 			st.setInt(1, id);

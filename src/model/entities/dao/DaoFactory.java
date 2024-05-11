@@ -2,8 +2,10 @@ package model.entities.dao;
 
 import model.db.Database;
 
-public class DaoFactory {
+public final class DaoFactory {
 	private static DepartmentDao departments;
+
+	private DaoFactory() {}
 
 	public static DepartmentDao getDepartmentDao() {
 		if (departments == null)
