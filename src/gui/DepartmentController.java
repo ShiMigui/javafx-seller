@@ -20,64 +20,65 @@ import model.entities.Department;
 import model.services.DepartmentService;
 
 public class DepartmentController implements Initializable {
-	private DepartmentService service;
+    private DepartmentService service;
 
-	@FXML
-	private Button btnNew;
+    @FXML
+    private Button btnNew;
 
-	@FXML
-	private TableView<Department> tb;
+    @FXML
+    private TableView<Department> tb;
 
-	private ObservableList<Department> obs;
+    private ObservableList<Department> obs;
 
-	@FXML
-	private TableColumn<Department, Integer> tbColumnId;
+    @FXML
+    private TableColumn<Department, Integer> tbColumnId;
 
-	@FXML
-	private TableColumn<Department, String> tbColumnName;
+    @FXML
+    private TableColumn<Department, String> tbColumnName;
 
-	@Override
-	public void initialize(URL url, ResourceBundle rb) {
-		initializeNodes();
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+	initializeNodes();
+    }
+
+    private void initializeNodes() {
+	try {
+	    tbColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
+	    tbColumnName.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+	    tb.prefHeightProperty().bind(ViewController.getStage().heightProperty());
+
+	    setDepartmentService(DepartmentService.getInstance());
+	    updateTb();
+	} catch (RuntimeException e) {
+	    e.printStackTrace();
 	}
+    }
 
-	private void initializeNodes() {
-		try {
-			tbColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
-			tbColumnName.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-			tb.prefHeightProperty().bind(ViewController.getStage().heightProperty());
-
-			setDepartmentService(DepartmentService.getInstance());
-			updateTb();
-		} catch (RuntimeException e) {
-			e.printStackTrace();
-		}
+    @FXML
+    public void onBtnNewAction() {
+	try {
+	    ViewController.createModalWindow("/gui/DepartmentFormView.fxml", "Novo departamento!", "novo_departamento",
+		    ViewController.getStage());
+	} catch (IOException e) {
+	    AlertController.setType(AlertType.ERROR);
+	    AlertController.showAlert("Erro ao tentar carregar recurso!", e.getMessage());
 	}
+    }
 
-	@FXML
-	public void onBtnNewAction() {
-		try {
-			ViewController.createModalWindow("/gui/DepartmentFormView.fxml", "Novo departamento!", "novo_departamento", ViewController.getStage());
-		} catch (IOException e) {
-			AlertController.setType(AlertType.ERROR);
-			AlertController.showAlert("Erro ao tentar carregar recurso!", e.getMessage());
-		}
+    public void updateTb() {
+	if (service == null) {
+	    throw new IllegalStateException("Service cannot be null");
 	}
+	setTbObs(service.findAll());
+    }
 
-	public void updateTb() {
-		if (service == null) {
-			throw new IllegalStateException("Service cannot be null");
-		}
-		setTbObs(service.findAll());
-	}
+    private void setTbObs(List<Department> all) {
+	obs = FXCollections.observableArrayList(all);
+	tb.setItems(obs);
+    }
 
-	private void setTbObs(List<Department> all) {
-		obs = FXCollections.observableArrayList(all);
-		tb.setItems(obs);
-	}
-
-	private void setDepartmentService(DepartmentService service) {
-		this.service = service;
-	}
+    private void setDepartmentService(DepartmentService service) {
+	this.service = service;
+    }
 }

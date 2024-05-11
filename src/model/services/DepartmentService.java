@@ -7,22 +7,22 @@ import model.interfaces.IEntityDao;
 import model.interfaces.IEntityService;
 
 public class DepartmentService implements IEntityService<Department> {
-	private static DepartmentService instance;
-	private DepartmentDao dao;
+    private static DepartmentService instance;
+    private DepartmentDao dao;
 
-	private DepartmentService(DepartmentDao dao) {
-		this.dao = dao;
-	}
+    private DepartmentService(DepartmentDao dao) {
+	this.dao = dao;
+    }
 
-	public static DepartmentService getInstance() {
-		if (instance == null) {
-			instance = new DepartmentService(DaoFactory.getDepartmentDao());
-		}
-		return instance;
+    public static DepartmentService getInstance() {
+	if (instance == null) {
+	    instance = new DepartmentService(DaoFactory.getDepartmentDao());
 	}
+	return instance;
+    }
 
-	@Override
-	public IEntityDao<Department> getEntityDao() {
-		return dao;
-	}
+    @Override
+    public IEntityDao<Department> getEntityDao() {
+	return dao;
+    }
 }

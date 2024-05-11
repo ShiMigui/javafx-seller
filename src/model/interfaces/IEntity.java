@@ -1,15 +1,15 @@
 package model.interfaces;
 
 public interface IEntity {
-	void setId(Integer id);
+    void setId(Integer id);
 
-	Integer getId();
+    Integer getId();
 
-	void setName(String name);
+    void setName(String name);
 
-	String getName();
+    String getName();
 
-	default String normalizeText(String text) {
-		return text.trim().replaceAll("\\s{2,}", " ").toUpperCase();
-	}
+    default String normalizeText(String text) {
+	return text.trim().replaceAll("\\s{2,}", " ").toUpperCase();
+    }
 }

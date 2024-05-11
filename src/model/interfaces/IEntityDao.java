@@ -4,13 +4,13 @@ import java.sql.ResultSet;
 import java.util.List;
 
 public interface IEntityDao<E> {
-	E convert(ResultSet rs);
+    E convert(ResultSet rs);
 
-	E findById(Integer id);
+    E findById(Integer id);
 
-	void insert(E obj);
+    void insert(E obj);
 
-	void update(E obj);
+    void update(E obj);
 
-	List<E> findAll();
+    List<E> findAll();
 }

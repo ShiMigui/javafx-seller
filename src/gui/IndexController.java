@@ -8,34 +8,32 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuItem;
 
-public class IndexController implements Initializable{
-	@FXML
-	private MenuItem mitSeller;
+public class IndexController implements Initializable {
+    @FXML
+    private MenuItem mitSeller;
 
-	@FXML
-	private MenuItem mitDepartment;
+    @FXML
+    private MenuItem mitDepartment;
 
-	@FXML
-	private MenuItem mitAbout;
+    @FXML
+    private MenuItem mitAbout;
 
-	@Override
-	public void initialize(URL uri, ResourceBundle rb) {
+    @Override
+    public void initialize(URL uri, ResourceBundle rb) {
+    }
 
+    @FXML
+    public void onMitSellerAction() {
+	System.out.println("Seller menu item click!");
+    }
 
-	}
+    @FXML
+    public void onMitDepartmentAction() {
+	ViewController.loadViewInIndex("/gui/DepartmentView.fxml", "Departments");
+    }
 
-	@FXML
-	public void onMitSellerAction() {
-		System.out.println("Seller menu item click!");
-	}
-
-	@FXML
-	public void onMitDepartmentAction() {
-		ViewController.loadViewInIndex("/gui/DepartmentView.fxml", "Departments");
-	}
-
-	@FXML
-	public void onMitAboutAction() {
-		ViewController.loadViewInIndex("/gui/AboutView.fxml", "About");
-	}
+    @FXML
+    public void onMitAboutAction() {
+	ViewController.loadViewInIndex("/gui/AboutView.fxml", "About");
+    }
 }

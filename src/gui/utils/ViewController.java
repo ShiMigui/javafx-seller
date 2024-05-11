@@ -16,76 +16,77 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class ViewController {
-	private static Stage stage;
-	private static Map<String, Stage> stages = new HashMap<>();
+    private static Stage stage;
+    private static Map<String, Stage> stages = new HashMap<>();
 
-	public static void loadViewInIndex(String relative, String name) {
-		try {
-			Pane content = getResource(relative);
+    public static void loadViewInIndex(String relative, String name) {
+	try {
+	    Pane content = getResource(relative);
 
-			VBox main = (VBox) ((ScrollPane) getScene().getRoot()).getContent();
-			Node menu = main.getChildren().get(0);
+	    VBox main = (VBox) ((ScrollPane) getScene().getRoot()).getContent();
+	    Node menu = main.getChildren().get(0);
 
-			main.getChildren().clear();
-			main.getChildren().add(menu);
-			main.getChildren().addAll(content.getChildren());
+	    main.getChildren().clear();
+	    main.getChildren().add(menu);
+	    main.getChildren().addAll(content.getChildren());
 
-			stage.setTitle(name);
-		} catch (IOException e) {
-			AlertController.setType(AlertType.ERROR);
-			AlertController.showAlert("Error loading resource", e.getMessage());
-		}
+	    stage.setTitle(name);
+	} catch (IOException e) {
+	    AlertController.setType(AlertType.ERROR);
+	    AlertController.showAlert("Error loading resource", e.getMessage());
+	}
+    }
+
+    public static void createModalWindow(String relative, String name, String mapName, Stage parentStage)
+	    throws IOException {
+	Pane pane = getResource(relative);
+
+	Stage stage = new Stage();
+	stage.setTitle(name);
+	stage.setScene(new Scene(pane));
+	stage.setResizable(false);
+	stage.initOwner(parentStage);
+	stage.initModality(Modality.WINDOW_MODAL);
+	stage.showAndWait();
+
+	stages.put(mapName, stage);
+    }
+
+    public static <N extends Region> N getResource(String relative) throws IOException {
+	return new FXMLLoader(ViewController.class.getResource(relative)).load();
+    }
+
+    public static Stage getStage(String name) {
+	return stages.get(name);
+    }
+
+    public static Stage getStage() {
+	return stage;
+    }
+
+    public static Scene getScene() {
+	return stage.getScene();
+    }
+
+    public static synchronized void setStage(Stage value) {
+	if (stage != null) {
+	    throw new RuntimeException("There is already a open stage!");
 	}
 
-	public static void createModalWindow(String relative, String name, String mapName, Stage parentStage) throws IOException {
-		Pane pane = getResource(relative);
+	stage = value;
+	if (getScene() == null) {
+	    try {
+		ScrollPane parent = getResource("/gui/IndexView.fxml");
+		parent.setFitToHeight(true);
+		parent.setFitToWidth(true);
 
-		Stage stage = new Stage();
-		stage.setTitle(name);
-		stage.setScene(new Scene(pane));
-		stage.setResizable(false);
-		stage.initOwner(parentStage);
-		stage.initModality(Modality.WINDOW_MODAL);
-		stage.showAndWait();
+		stage.setScene(new Scene(parent));
+		stage.show();
 
-		stages.put(mapName, stage);
+		stage.setTitle("Bem-vindo(a)");
+	    } catch (IOException e) {
+		e.printStackTrace();
+	    }
 	}
-
-	public static <N extends Region> N getResource(String relative) throws IOException {
-		return new FXMLLoader(ViewController.class.getResource(relative)).load();
-	}
-
-	public static Stage getStage(String name) {
-		return stages.get(name);
-	}
-
-	public static Stage getStage() {
-		return stage;
-	}
-
-	public static Scene getScene() {
-		return stage.getScene();
-	}
-
-	public static synchronized void setStage(Stage value) {
-		if (stage != null) {
-			throw new RuntimeException("There is already a open stage!");
-		}
-
-		stage = value;
-		if (getScene() == null) {
-			try {
-				ScrollPane parent = getResource("/gui/IndexView.fxml");
-				parent.setFitToHeight(true);
-				parent.setFitToWidth(true);
-
-				stage.setScene(new Scene(parent));
-				stage.show();
-
-				stage.setTitle("Bem-vindo(a)");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+    }
 }
