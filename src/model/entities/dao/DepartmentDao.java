@@ -47,7 +47,8 @@ public class DepartmentDao implements IEntityDao<Department> {
 	@Override
 	public void insert(Department obj) {
 		try {
-			st = con.prepareStatement("INSERT INTO DEPARTMENT (nm_department) VALUES (?);", Statement.RETURN_GENERATED_KEYS);
+			st = con.prepareStatement("INSERT INTO DEPARTMENT (nm_department) VALUES (?);",
+					Statement.RETURN_GENERATED_KEYS);
 			st.setString(1, obj.getName());
 			if (st.executeUpdate() > 0) {
 				rs = st.getGeneratedKeys();
@@ -64,8 +65,21 @@ public class DepartmentDao implements IEntityDao<Department> {
 
 	@Override
 	public void update(Department obj) {
-		// TODO Auto-generated method stub
+		try {
+			if (obj.getId() == null)
+				throw new DatabaseIntegrityException("Department id cannot be null!");
 
+			st = con.prepareStatement("UPDATE DEPARTMENT SET nm_department = ? WHERE cd_department = ?;");
+			st.setString(1, obj.getName());
+			st.setInt(2, obj.getId());
+
+			if (st.executeUpdate() == 0)
+				throw new DatabaseIntegrityException("Unexpected error: No rows affected!");
+		} catch (SQLException e) {
+			throw new DatabaseIntegrityException("Cannot update Department(" + obj.getId() + "): " + e.getMessage());
+		} finally {
+			Database.close(st, rs);
+		}
 	}
 
 	@Override
