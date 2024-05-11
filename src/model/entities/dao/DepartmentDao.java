@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 import model.db.Database;
@@ -28,7 +29,7 @@ public class DepartmentDao implements IEntityDao<Department> {
 	@Override
 	public Department finById(Integer id) {
 		try {
-			st = con.prepareStatement("SELECT nm_department FROM DEPARTMENT WHERE cd_department = ?");
+			st = con.prepareStatement("SELECT nm_department FROM DEPARTMENT WHERE cd_department = ?;");
 			st.setInt(1, id);
 			rs = st.executeQuery();
 
@@ -45,8 +46,20 @@ public class DepartmentDao implements IEntityDao<Department> {
 
 	@Override
 	public void insert(Department obj) {
-		// TODO Auto-generated method stub
-
+		try {
+			st = con.prepareStatement("INSERT INTO DEPARTMENT (nm_department) VALUES (?);", Statement.RETURN_GENERATED_KEYS);
+			st.setString(1, obj.getName());
+			if (st.executeUpdate() > 0) {
+				rs = st.getGeneratedKeys();
+				if (rs.next())
+					obj.setId(rs.getInt(1));
+			} else
+				throw new DatabaseIntegrityException("Unexpected error: No rows affected!");
+		} catch (SQLException e) {
+			throw new DatabaseIntegrityException("Cannot insert Department: " + e.getMessage());
+		} finally {
+			Database.close(st, rs);
+		}
 	}
 
 	@Override
