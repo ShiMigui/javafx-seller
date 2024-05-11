@@ -39,13 +39,18 @@ public class DepartmentController implements Initializable {
 	}
 
 	private void initializeNodes() {
-		tbColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
-		tbColumnName.setCellValueFactory(new PropertyValueFactory<>("name"));
+		try {
+			tbColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
+			tbColumnName.setCellValueFactory(new PropertyValueFactory<>("name"));
 
-		tb.prefHeightProperty().bind(ViewController.getStage().heightProperty());
-		
-		setDepartmentJPAService(new DepartmentService());
-		updateTb();
+			tb.prefHeightProperty().bind(ViewController.getStage().heightProperty());
+			
+			setDepartmentService(DepartmentService.getInstance());
+			updateTb();
+		}
+		catch(RuntimeException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@FXML
@@ -64,7 +69,7 @@ public class DepartmentController implements Initializable {
 		tb.setItems(obs);
 	}
 
-	private void setDepartmentJPAService(DepartmentService service) {
+	private void setDepartmentService(DepartmentService service) {
 		this.service = service;
 	}
 }
