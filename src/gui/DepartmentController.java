@@ -1,14 +1,17 @@
 package gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import gui.utils.AlertController;
 import gui.utils.ViewController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -44,23 +47,28 @@ public class DepartmentController implements Initializable {
 			tbColumnName.setCellValueFactory(new PropertyValueFactory<>("name"));
 
 			tb.prefHeightProperty().bind(ViewController.getStage().heightProperty());
-			
+
 			setDepartmentService(DepartmentService.getInstance());
 			updateTb();
-		}
-		catch(RuntimeException e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 		}
 	}
 
 	@FXML
 	public void onBtnNewAction() {
-		System.out.println("Btn new click!");
+		try {
+			ViewController.createModalWindow("/gui/DepartmentFormView.fxml", "Novo departamento!", "novo_departamento", ViewController.getStage());
+		} catch (IOException e) {
+			AlertController.setType(AlertType.ERROR);
+			AlertController.showAlert("Erro ao tentar carregar recurso!", e.getMessage());
+		}
 	}
 
 	public void updateTb() {
-		if (service == null)
+		if (service == null) {
 			throw new IllegalStateException("Service cannot be null");
+		}
 		setTbObs(service.findAll());
 	}
 

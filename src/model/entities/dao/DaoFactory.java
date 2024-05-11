@@ -8,8 +8,9 @@ public final class DaoFactory {
 	private DaoFactory() {}
 
 	public static DepartmentDao getDepartmentDao() {
-		if (departments == null)
+		if (departments == null) {
 			departments = new DepartmentDao(Database.getConnection());
+		}
 
 		return departments;
 	}

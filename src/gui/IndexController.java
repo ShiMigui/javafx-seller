@@ -11,31 +11,31 @@ import javafx.scene.control.MenuItem;
 public class IndexController implements Initializable{
 	@FXML
 	private MenuItem mitSeller;
-	
+
 	@FXML
 	private MenuItem mitDepartment;
-	
+
 	@FXML
 	private MenuItem mitAbout;
-	
+
 	@Override
 	public void initialize(URL uri, ResourceBundle rb) {
-		
-		
+
+
 	}
-	
+
 	@FXML
 	public void onMitSellerAction() {
 		System.out.println("Seller menu item click!");
 	}
-	
+
 	@FXML
 	public void onMitDepartmentAction() {
-		ViewController.loadView("/gui/DepartmentView.fxml", "Departments");
+		ViewController.loadViewInIndex("/gui/DepartmentView.fxml", "Departments");
 	}
-	
+
 	@FXML
 	public void onMitAboutAction() {
-		ViewController.loadView("/gui/AboutView.fxml", "About");
+		ViewController.loadViewInIndex("/gui/AboutView.fxml", "About");
 	}
 }

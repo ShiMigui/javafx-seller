@@ -15,8 +15,9 @@ public class DepartmentService implements IEntityService<Department> {
 	}
 
 	public static DepartmentService getInstance() {
-		if (instance == null)
+		if (instance == null) {
 			instance = new DepartmentService(DaoFactory.getDepartmentDao());
+		}
 		return instance;
 	}
 

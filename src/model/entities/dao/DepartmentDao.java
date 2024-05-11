@@ -38,10 +38,11 @@ public class DepartmentDao implements IEntityDao<Department> {
 			st.setInt(1, id);
 			rs = st.executeQuery();
 
-			if (rs.next())
+			if (rs.next()) {
 				return new Department(id, rs.getString(1));
-			else
+			} else {
 				throw new DatabaseIntegrityException("Unexpected error: The Result has no rows!");
+			}
 		} catch (SQLException e) {
 			throw new DatabaseIntegrityException("Cannot select Department(" + id + "): " + e.getMessage());
 		} finally {
@@ -57,10 +58,12 @@ public class DepartmentDao implements IEntityDao<Department> {
 			st.setString(1, obj.getName());
 			if (st.executeUpdate() > 0) {
 				rs = st.getGeneratedKeys();
-				if (rs.next())
+				if (rs.next()) {
 					obj.setId(rs.getInt(1));
-			} else
+				}
+			} else {
 				throw new DatabaseIntegrityException("Unexpected error: No rows affected!");
+			}
 		} catch (SQLException e) {
 			throw new DatabaseIntegrityException("Cannot insert Department: " + e.getMessage());
 		} finally {
@@ -71,15 +74,17 @@ public class DepartmentDao implements IEntityDao<Department> {
 	@Override
 	public void update(Department obj) {
 		try {
-			if (obj.getId() == null)
+			if (obj.getId() == null) {
 				throw new DatabaseIntegrityException("Department id cannot be null!");
+			}
 
 			st = con.prepareStatement("UPDATE DEPARTMENT SET nm_department = ? WHERE cd_department = ?;");
 			st.setString(1, obj.getName());
 			st.setInt(2, obj.getId());
 
-			if (st.executeUpdate() == 0)
+			if (st.executeUpdate() == 0) {
 				throw new DatabaseIntegrityException("Unexpected error: No rows affected!");
+			}
 		} catch (SQLException e) {
 			throw new DatabaseIntegrityException("Cannot update Department(" + obj.getId() + "): " + e.getMessage());
 		} finally {
@@ -94,9 +99,10 @@ public class DepartmentDao implements IEntityDao<Department> {
 			st = con.prepareStatement("SELECT cd_department, nm_department FROM DEPARTMENT ORDER BY cd_department;");
 			rs = st.executeQuery();
 
-			while(rs.next())
+			while(rs.next()) {
 				list.add(convert(rs));
-			
+			}
+
 			return list;
 		} catch (SQLException e) {
 			throw new DatabaseIntegrityException("Cannot select add Departments: " + e.getMessage());

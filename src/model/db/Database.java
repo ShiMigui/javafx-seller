@@ -47,10 +47,12 @@ public class Database {
 
 	public static void close(Statement st, ResultSet rs) {
 		try {
-			if (rs != null && !rs.isClosed())
+			if (rs != null && !rs.isClosed()) {
 				rs.close();
-			if (st != null && !st.isClosed())
+			}
+			if (st != null && !st.isClosed()) {
 				st.close();
+			}
 		} catch (SQLException e) {
 			throw new DatabaseException("Cannot close: " + e.getMessage());
 		}

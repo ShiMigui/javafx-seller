@@ -8,7 +8,7 @@ public interface IEntity {
 	void setName(String name);
 
 	String getName();
-	
+
 	default String normalizeText(String text) {
 		return text.trim().replaceAll("\\s{2,}", " ").toUpperCase();
 	}

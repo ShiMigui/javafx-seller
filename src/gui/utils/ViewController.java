@@ -1,6 +1,8 @@
 package gui.utils;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -10,15 +12,17 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class ViewController {
 	private static Stage stage;
+	private static Map<String, Stage> stages = new HashMap<>();
 
-	public static void loadView(String relative, String name) {
+	public static void loadViewInIndex(String relative, String name) {
 		try {
 			Pane content = getResource(relative);
-			
+
 			VBox main = (VBox) ((ScrollPane) getScene().getRoot()).getContent();
 			Node menu = main.getChildren().get(0);
 
@@ -26,16 +30,33 @@ public class ViewController {
 			main.getChildren().add(menu);
 			main.getChildren().addAll(content.getChildren());
 
-			setTitleStage(name);
+			stage.setTitle(name);
 		} catch (IOException e) {
 			AlertController.setType(AlertType.ERROR);
 			AlertController.showAlert("Error loading resource", e.getMessage());
-			e.printStackTrace();
 		}
+	}
+
+	public static void createModalWindow(String relative, String name, String mapName, Stage parentStage) throws IOException {
+		Pane pane = getResource(relative);
+
+		Stage stage = new Stage();
+		stage.setTitle(name);
+		stage.setScene(new Scene(pane));
+		stage.setResizable(false);
+		stage.initOwner(parentStage);
+		stage.initModality(Modality.WINDOW_MODAL);
+		stage.showAndWait();
+
+		stages.put(mapName, stage);
 	}
 
 	public static <N extends Region> N getResource(String relative) throws IOException {
 		return new FXMLLoader(ViewController.class.getResource(relative)).load();
+	}
+
+	public static Stage getStage(String name) {
+		return stages.get(name);
 	}
 
 	public static Stage getStage() {
@@ -46,13 +67,10 @@ public class ViewController {
 		return stage.getScene();
 	}
 
-	public static void setTitleStage(String name) {
-		stage.setTitle(name);
-	}
-
 	public static synchronized void setStage(Stage value) {
-		if (stage != null)
+		if (stage != null) {
 			throw new RuntimeException("There is already a open stage!");
+		}
 
 		stage = value;
 		if (getScene() == null) {
@@ -64,7 +82,7 @@ public class ViewController {
 				stage.setScene(new Scene(parent));
 				stage.show();
 
-				setTitleStage("Bem-vindo(a)");
+				stage.setTitle("Bem-vindo(a)");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
