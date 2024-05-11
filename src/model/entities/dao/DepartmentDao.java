@@ -18,7 +18,7 @@ public class DepartmentDao implements IEntityDao<Department> {
 	private PreparedStatement st;
 	private ResultSet rs;
 
-	public DepartmentDao(Connection con) {
+	protected DepartmentDao(Connection con) {
 		this.con = con;
 	}
 
