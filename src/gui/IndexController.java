@@ -1,5 +1,6 @@
 package gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -29,11 +30,19 @@ public class IndexController implements Initializable {
 
     @FXML
     public void onMitDepartmentAction() {
-	ViewController.loadViewInIndex("/gui/pages/DepartmentView.fxml", "Departments");
+	try {
+	    ViewController.loadViewInIndex("/gui/pages/DepartmentView.fxml", "Departments");
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
     }
 
     @FXML
     public void onMitAboutAction() {
-	ViewController.loadViewInIndex("/gui/pages/AboutView.fxml", "About");
+	try {
+	    ViewController.loadViewInIndex("/gui/pages/AboutView.fxml", "About");
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
     }
 }

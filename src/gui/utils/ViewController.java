@@ -1,13 +1,11 @@
 package gui.utils;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
@@ -16,77 +14,68 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class ViewController {
-    private static Stage stage;
-    private static Map<String, Stage> stages = new HashMap<>();
+    private static Stage index;
+    private static VBox indexBox;
+    private static Node indexMenu;
 
-    public static void loadViewInIndex(String relative, String name) {
-	try {
-	    Pane content = getResource(relative);
+    public static void loadViewInIndex(String relative, String name) throws IOException {
+	Pane content = getResource(relative);
 
-	    VBox main = (VBox) ((ScrollPane) getScene().getRoot()).getContent();
-	    Node menu = main.getChildren().get(0);
+	indexBox.getChildren().clear();
+	indexBox.getChildren().add(indexMenu);
+	indexBox.getChildren().addAll(content.getChildren());
 
-	    main.getChildren().clear();
-	    main.getChildren().add(menu);
-	    main.getChildren().addAll(content.getChildren());
-
-	    stage.setTitle(name);
-	} catch (IOException e) {
-	    AlertController.setType(AlertType.ERROR);
-	    AlertController.showAlert("Error loading resource", e.getMessage());
-	}
+	index.setTitle(name);
     }
 
-    public static void createModalWindow(String relative, String name, String mapName, Stage parentStage)
-	    throws IOException {
-	Pane pane = getResource(relative);
-
+    public static Stage createWindow(String relative, String name, Stage owner) throws IOException {
+	Parent parent = getResource(relative);
+	Scene scene = new Scene(parent);
 	Stage stage = new Stage();
+
 	stage.setTitle(name);
-	stage.setScene(new Scene(pane));
-	stage.setResizable(false);
-	stage.initOwner(parentStage);
-	stage.initModality(Modality.WINDOW_MODAL);
-	stage.showAndWait();
+	stage.setScene(scene);
+	stage.initOwner(owner);
 
-	stages.put(mapName, stage);
-    }
-
-    public static <N extends Region> N getResource(String relative) throws IOException {
-	return new FXMLLoader(ViewController.class.getResource(relative)).load();
-    }
-
-    public static Stage getStage(String name) {
-	return stages.get(name);
-    }
-
-    public static Stage getStage() {
 	return stage;
     }
 
-    public static Scene getScene() {
-	return stage.getScene();
+    public static Stage createModalWindow(String relative, String name, Stage owner) throws IOException {
+	Stage stage = createWindow(relative, name, owner);
+
+	stage.setResizable(false);
+	stage.initModality(Modality.WINDOW_MODAL);
+	
+	return stage;
     }
 
-    public static synchronized void setStage(Stage value) {
-	if (stage != null) {
+    private static <P extends Region> P getResource(String relative) throws IOException {
+	return FXMLLoader.load(ViewController.class.getResource(relative));
+    }
+
+    public static Stage getStage() {
+	return index;
+    }
+
+    public static Scene getScene() {
+	return index.getScene();
+    }
+
+    public static void setStage(Stage st) throws IOException {
+	if (index != null)
 	    throw new RuntimeException("There is already a open stage!");
-	}
 
-	stage = value;
-	if (getScene() == null) {
-	    try {
-		ScrollPane parent = getResource("/gui/IndexView.fxml");
-		parent.setFitToHeight(true);
-		parent.setFitToWidth(true);
+	index = st;
+	if (st.getScene() == null) {
+	    ScrollPane pane = getResource("/gui/IndexView.fxml");
+	    pane.setFitToHeight(true);
+	    pane.setFitToWidth(true);
+	    indexBox = (VBox) pane.getContent();
+	    indexMenu = indexBox.getChildren().get(0);
 
-		stage.setScene(new Scene(parent));
-		stage.show();
-
-		stage.setTitle("Bem-vindo(a)");
-	    } catch (IOException e) {
-		e.printStackTrace();
-	    }
+	    st.setScene(new Scene(pane));
+	    st.setTitle("Bem-vindo(a)");
+	    st.show();
 	}
     }
 }

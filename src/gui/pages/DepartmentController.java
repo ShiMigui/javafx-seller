@@ -16,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import model.entities.Department;
 import model.services.DepartmentService;
 
@@ -58,8 +59,9 @@ public class DepartmentController implements Initializable {
     @FXML
     public void onBtnNewAction() {
 	try {
-	    ViewController.createModalWindow("/gui/modals/DepartmentFormView.fxml", "Novo departamento!", "novo_departamento",
-		    ViewController.getStage());
+	    Stage window = ViewController.createModalWindow("/gui/pages/DepartmentFormModalView.fxml",
+		    "Novo departamento!", ViewController.getStage());
+	    window.showAndWait();
 	} catch (IOException e) {
 	    AlertController.setType(AlertType.ERROR);
 	    AlertController.showAlert("Erro ao tentar carregar recurso!", e.getMessage());
