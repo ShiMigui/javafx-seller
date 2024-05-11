@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import model.db.Database;
@@ -23,7 +24,11 @@ public class DepartmentDao implements IEntityDao<Department> {
 
 	@Override
 	public Department convert(ResultSet rs) {
-		return null;
+		try {
+			return new Department(rs.getInt(1), rs.getString(2));
+		} catch (SQLException e) {
+			throw new DatabaseIntegrityException("Cannot convert ResultSet to database!");
+		}
 	}
 
 	@Override
@@ -84,8 +89,20 @@ public class DepartmentDao implements IEntityDao<Department> {
 
 	@Override
 	public List<Department> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			List<Department> list = new ArrayList<>();
+			st = con.prepareStatement("SELECT cd_department, nm_department FROM DEPARTMENT ORDER BY cd_department;");
+			rs = st.executeQuery();
+
+			while(rs.next())
+				list.add(convert(rs));
+			
+			return list;
+		} catch (SQLException e) {
+			throw new DatabaseIntegrityException("Cannot select add Departments: " + e.getMessage());
+		} finally {
+			Database.close(st, rs);
+		}
 	}
 
 }
