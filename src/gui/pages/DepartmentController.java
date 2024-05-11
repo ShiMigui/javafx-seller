@@ -5,7 +5,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import gui.utils.AlertController;
+import gui.utils.AlertBuilder;
 import gui.utils.ViewController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -52,7 +52,7 @@ public class DepartmentController implements Initializable {
 	    setDepartmentService(DepartmentService.getInstance());
 	    updateTb();
 	} catch (RuntimeException e) {
-	    e.printStackTrace();
+	    AlertBuilder.type(AlertType.ERROR).title("Erro ao tentar carregar recurso").content(e.getMessage());
 	}
     }
 
@@ -63,15 +63,13 @@ public class DepartmentController implements Initializable {
 		    "Novo departamento!", ViewController.getStage());
 	    window.showAndWait();
 	} catch (IOException e) {
-	    AlertController.setType(AlertType.ERROR);
-	    AlertController.showAlert("Erro ao tentar carregar recurso!", e.getMessage());
+	    AlertBuilder.type(AlertType.ERROR).title("Erro ao tentar carregar recurso").content(e.getMessage());
 	}
     }
 
     public void updateTb() {
-	if (service == null) {
+	if (service == null) 
 	    throw new IllegalStateException("Service cannot be null");
-	}
 	setTbObs(service.findAll());
     }
 

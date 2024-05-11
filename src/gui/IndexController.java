@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import gui.utils.AlertBuilder;
 import gui.utils.ViewController;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Alert.AlertType;
 
 public class IndexController implements Initializable {
     @FXML
@@ -33,7 +35,7 @@ public class IndexController implements Initializable {
 	try {
 	    ViewController.loadViewInIndex("/gui/pages/DepartmentView.fxml", "Departments");
 	} catch (IOException e) {
-	    e.printStackTrace();
+	    AlertBuilder.type(AlertType.ERROR).title("Erro ao tentar carregar recurso").content(e.getMessage());
 	}
     }
 
@@ -42,7 +44,7 @@ public class IndexController implements Initializable {
 	try {
 	    ViewController.loadViewInIndex("/gui/pages/AboutView.fxml", "About");
 	} catch (IOException e) {
-	    e.printStackTrace();
+	    AlertBuilder.type(AlertType.ERROR).title("Erro ao tentar carregar recurso").content(e.getMessage());
 	}
     }
 }
