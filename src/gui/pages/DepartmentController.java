@@ -1,4 +1,4 @@
-package gui;
+package gui.pages;
 
 import java.io.IOException;
 import java.net.URL;
@@ -58,7 +58,7 @@ public class DepartmentController implements Initializable {
     @FXML
     public void onBtnNewAction() {
 	try {
-	    ViewController.createModalWindow("/gui/DepartmentFormView.fxml", "Novo departamento!", "novo_departamento",
+	    ViewController.createModalWindow("/gui/modals/DepartmentFormView.fxml", "Novo departamento!", "novo_departamento",
 		    ViewController.getStage());
 	} catch (IOException e) {
 	    AlertController.setType(AlertType.ERROR);

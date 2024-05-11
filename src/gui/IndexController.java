@@ -29,11 +29,11 @@ public class IndexController implements Initializable {
 
     @FXML
     public void onMitDepartmentAction() {
-	ViewController.loadViewInIndex("/gui/DepartmentView.fxml", "Departments");
+	ViewController.loadViewInIndex("/gui/pages/DepartmentView.fxml", "Departments");
     }
 
     @FXML
     public void onMitAboutAction() {
-	ViewController.loadViewInIndex("/gui/AboutView.fxml", "About");
+	ViewController.loadViewInIndex("/gui/pages/AboutView.fxml", "About");
     }
 }
