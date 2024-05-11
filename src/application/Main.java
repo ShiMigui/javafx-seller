@@ -1,6 +1,6 @@
 package application;
 
-import gui.utils.ViewController;
+import gui.utils.MainViewManager;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -8,7 +8,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
 	try {
-	    ViewController.setStage(stage);
+	    MainViewManager.setStage(stage);
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}

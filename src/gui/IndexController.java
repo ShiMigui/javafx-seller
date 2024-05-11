@@ -1,11 +1,14 @@
 package gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import gui.utils.ViewController;
+import gui.utils.AlertBuilder;
+import gui.utils.MainViewManager;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 
 public class IndexController implements Initializable {
@@ -29,11 +32,19 @@ public class IndexController implements Initializable {
 
     @FXML
     public void onMitDepartmentAction() {
-	ViewController.loadViewInIndex("/gui/DepartmentView.fxml", "Departments");
+	try {
+	    MainViewManager.loadViewInIndex("/gui/pages/DepartmentView.fxml", "Departments");
+	} catch (IOException e) {
+	    AlertBuilder.type(AlertType.ERROR).title("Erro ao tentar carregar recurso").content(e.getMessage());
+	}
     }
 
     @FXML
     public void onMitAboutAction() {
-	ViewController.loadViewInIndex("/gui/AboutView.fxml", "About");
+	try {
+	    MainViewManager.loadViewInIndex("/gui/pages/AboutView.fxml", "About");
+	} catch (IOException e) {
+	    AlertBuilder.type(AlertType.ERROR).title("Erro ao tentar carregar recurso").content(e.getMessage());
+	}
     }
 }
