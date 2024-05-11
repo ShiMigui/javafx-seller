@@ -5,11 +5,11 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import gui.utils.AlertBuilder;
-import gui.utils.ViewController;
+import gui.utils.MainViewManager;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.MenuItem;
 
 public class IndexController implements Initializable {
     @FXML
@@ -33,7 +33,7 @@ public class IndexController implements Initializable {
     @FXML
     public void onMitDepartmentAction() {
 	try {
-	    ViewController.loadViewInIndex("/gui/pages/DepartmentView.fxml", "Departments");
+	    MainViewManager.loadViewInIndex("/gui/pages/DepartmentView.fxml", "Departments");
 	} catch (IOException e) {
 	    AlertBuilder.type(AlertType.ERROR).title("Erro ao tentar carregar recurso").content(e.getMessage());
 	}
@@ -42,7 +42,7 @@ public class IndexController implements Initializable {
     @FXML
     public void onMitAboutAction() {
 	try {
-	    ViewController.loadViewInIndex("/gui/pages/AboutView.fxml", "About");
+	    MainViewManager.loadViewInIndex("/gui/pages/AboutView.fxml", "About");
 	} catch (IOException e) {
 	    AlertBuilder.type(AlertType.ERROR).title("Erro ao tentar carregar recurso").content(e.getMessage());
 	}
