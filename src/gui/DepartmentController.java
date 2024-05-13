@@ -60,8 +60,8 @@ public class DepartmentController implements Initializable {
     @FXML
     public void onBtnNewAction() {
 	try {
-	    Stage window = WindowManager.createModalWindow("/gui/windows/DepartmentFormModalView.fxml",
-		    "Novo departamento", MainViewManager.getStage());
+	    Stage window = WindowManager.createModalWindow("/gui/windows/DepartmentFormView.fxml", "Novo departamento",
+		    MainViewManager.getStage());
 	    window.showAndWait();
 	} catch (IOException e) {
 	    AlertBuilder.type(AlertType.ERROR).title("Erro ao tentar carregar recurso").content(e.getMessage());
