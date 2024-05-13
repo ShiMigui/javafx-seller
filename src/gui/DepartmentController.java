@@ -8,21 +8,22 @@ import java.util.ResourceBundle;
 import gui.utils.AlertBuilder;
 import gui.utils.MainViewManager;
 import gui.utils.WindowManager;
+import gui.windows.DepartmentFormController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Stage;
 import model.entities.Department;
+import model.interfaces.IController;
 import model.services.DepartmentService;
 
-public class DepartmentController implements Initializable {
+public class DepartmentController implements IController {
     private DepartmentService service;
+    private WindowManager wm = new WindowManager();
 
     @FXML
     private Button btnNew;
@@ -59,10 +60,17 @@ public class DepartmentController implements Initializable {
 
     @FXML
     public void onBtnNewAction() {
+	loadFormWindow(new Department());
+    }
+
+    private void loadFormWindow(Department dep) {
 	try {
-	    Stage window = WindowManager.createModalWindow("/gui/windows/DepartmentFormView.fxml", "Novo departamento",
-		    MainViewManager.getStage());
-	    window.showAndWait();
+	    wm.windowModal("/gui/windows/DepartmentFormView.fxml", "Novo departamento");
+
+	    DepartmentFormController controller = wm.getController();
+	    controller.setDepartment(dep);
+
+	    wm.getWindow().showAndWait();
 	} catch (IOException e) {
 	    AlertBuilder.type(AlertType.ERROR).title("Erro ao tentar carregar recurso").content(e.getMessage());
 	}

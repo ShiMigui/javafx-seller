@@ -7,11 +7,11 @@ import java.util.ResourceBundle;
 import gui.utils.AlertBuilder;
 import gui.utils.MainViewManager;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
+import model.interfaces.IController;
 
-public class IndexController implements Initializable {
+public class IndexController implements IController {
     @FXML
     private MenuItem mitSeller;
 

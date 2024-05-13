@@ -1,6 +1,7 @@
 package gui.utils;
 
 import java.io.IOException;
+import java.util.function.Consumer;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -8,33 +9,46 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import model.interfaces.IController;
 
-public final class WindowManager {
-    private WindowManager() {
+public class WindowManager {
+    private Stage window;
+    private FXMLLoader loader;
+
+    public void window(String relative, String name, Stage owner, Consumer<Stage> config) throws IOException {
+	loader = getLoader(relative);
+
+	Parent node = loader.load();
+	Scene scene = new Scene(node);
+	window = new Stage();
+
+	window.setTitle(name);
+	window.setScene(scene);
+	window.initOwner(owner);
+
+	config.accept(window);
     }
 
-    public static Stage createWindow(String relative, String name, Stage owner) throws IOException {
-	Parent parent = getResource(relative);
-	Scene scene = new Scene(parent);
-	Stage stage = new Stage();
-
-	stage.setTitle(name);
-	stage.setScene(scene);
-	stage.initOwner(owner);
-
-	return stage;
-    }
-
-    public static Stage createModalWindow(String relative, String name, Stage owner) throws IOException {
-	Stage stage = createWindow(relative, name, owner);
-
-	stage.setResizable(false);
-	stage.initModality(Modality.WINDOW_MODAL);
-
-	return stage;
+    public void windowModal(String relative, String name) throws IOException {
+	window(relative, name, MainViewManager.getStage(), (stage) -> {
+	    stage.setResizable(false);
+	    stage.initModality(Modality.WINDOW_MODAL);
+	});
     }
 
     public static <P extends Region> P getResource(String relative) throws IOException {
 	return FXMLLoader.load(WindowManager.class.getResource(relative));
+    }
+
+    public static FXMLLoader getLoader(String relative) {
+	return new FXMLLoader(WindowManager.class.getResource(relative));
+    }
+
+    public <C extends IController> C getController() {
+	return loader.getController();
+    }
+
+    public Stage getWindow() {
+	return window;
     }
 }
