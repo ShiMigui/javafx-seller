@@ -30,7 +30,8 @@
       <TableView fx:id="tb" prefHeight="200.0" prefWidth="200.0">
         <columns>
           <TableColumn fx:id="tbColumnId" prefWidth="75.0" text="ID" />
-          <TableColumn fx:id="tbColumnName" prefWidth="75.0" text="NAME" />
+          <TableColumn fx:id="tbColumnName" text="NAME" />
+            <TableColumn fx:id="tbColumnEdit" prefWidth="75.0" />
         </columns>
       </TableView>
    </children>
