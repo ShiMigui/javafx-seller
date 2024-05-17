@@ -3,9 +3,11 @@ package gui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import gui.utils.AlertBuilder;
+import gui.utils.ConfirmationBuilder;
 import gui.utils.MainViewManager;
 import gui.utils.WindowManager;
 import gui.windows.DepartmentFormController;
@@ -15,6 +17,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -33,6 +36,9 @@ public class DepartmentController implements IController, IDataChangeListener {
     private Button btnNew;
 
     @FXML
+    private Button btnUpdate;
+
+    @FXML
     private TableView<Department> tb;
 
     private ObservableList<Department> obs;
@@ -45,6 +51,9 @@ public class DepartmentController implements IController, IDataChangeListener {
 
     @FXML
     private TableColumn<Department, Department> tbColumnEdit;
+
+    @FXML
+    private TableColumn<Department, Department> tbColumnRemove;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -62,27 +71,14 @@ public class DepartmentController implements IController, IDataChangeListener {
 	}
     }
 
-    private void addEditButtons() {
-	tbColumnEdit.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
-	tbColumnEdit.setCellFactory(param -> new TableCell<Department, Department>() {
-	    private final Button button = new Button("edit");
-
-	    @Override
-	    protected void updateItem(Department obj, boolean empty) {
-		super.updateItem(obj, empty);
-		if (obj == null) {
-		    setGraphic(null);
-		    return;
-		}
-		setGraphic(button);
-		button.setOnAction(event -> loadFormWindow(obj));
-	    }
-	});
+    @FXML
+    private void onBtnNewAction() {
+	loadFormWindow(new Department());
     }
 
     @FXML
-    public void onBtnNewAction() {
-	loadFormWindow(new Department());
+    private void onBtnUpdateAction() {
+	updateTb();
     }
 
     private void loadFormWindow(Department dep) {
@@ -106,6 +102,7 @@ public class DepartmentController implements IController, IDataChangeListener {
 	    throw new NullPointerException("Service cannot be null");
 	setTbObs(service.findAll());
 	addEditButtons();
+	addRemoveButtons();
     }
 
     private void setTbObs(List<Department> all) {
@@ -116,5 +113,54 @@ public class DepartmentController implements IController, IDataChangeListener {
     @Override
     public void dataChanged() {
 	updateTb();
+    }
+
+    private void removeEntity(Department obj) {
+	try {
+	    Optional<ButtonType> op = ConfirmationBuilder.getInstance().title("Remove a department")
+		    .content("Você deseja ralmente deletar o departamento \"" + obj.getName() + "\"?").showAndWait();
+
+	    if (op.get() == ButtonType.OK)
+		service.remove(obj);
+	    updateTb();
+	} catch (RuntimeException e) {
+	    AlertBuilder.type(AlertType.ERROR).title("Error removing object").content(e.getMessage()).show();
+	}
+    }
+
+    private void addEditButtons() {
+	tbColumnEdit.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+	tbColumnEdit.setCellFactory(param -> new TableCell<Department, Department>() {
+	    private final Button button = new Button("edit");
+
+	    @Override
+	    protected void updateItem(Department obj, boolean empty) {
+		super.updateItem(obj, empty);
+		if (obj == null) {
+		    setGraphic(null);
+		    return;
+		}
+		setGraphic(button);
+		button.setOnAction(event -> loadFormWindow(obj));
+	    }
+	});
+    }
+
+    private void addRemoveButtons() {
+	tbColumnRemove.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+	tbColumnRemove.setCellFactory(param -> new TableCell<Department, Department>() {
+	    private final Button button = new Button("remove");
+
+	    @Override
+	    protected void updateItem(Department obj, boolean empty) {
+		super.updateItem(obj, empty);
+		if (obj == null) {
+		    setGraphic(null);
+		    return;
+		}
+		setGraphic(button);
+		button.setOnAction(event -> removeEntity(obj));
+	    }
+	});
     }
 }
