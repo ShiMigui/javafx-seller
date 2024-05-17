@@ -4,14 +4,21 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
 public class AlertBuilder {
-    private Alert alert;
+    protected Alert alert;
+    protected static AlertBuilder builder;
 
     private AlertBuilder() {
     }
 
     public static AlertBuilder type(AlertType type) {
-	AlertBuilder builder = new AlertBuilder();
-	builder.alert = new Alert(type);
+	if (builder == null)
+	    builder = new AlertBuilder();
+	
+	if (builder.alert == null)
+	    builder.alert = new Alert(type);
+	else
+	    builder.alert.setAlertType(type);
+	
 	return builder;
     }
 
