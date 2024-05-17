@@ -2,7 +2,7 @@ package model.interfaces;
 
 import java.util.List;
 
-public interface IEntityService<E> {
+public interface IEntityService<E extends IEntity> {
     IEntityDao<E> getEntityDao();
 
     default List<E> findAll() {
@@ -19,5 +19,12 @@ public interface IEntityService<E> {
 
     default void insert(E obj) {
 	getEntityDao().insert(obj);
+    }
+
+    default void insertOrUpdate(E obj) {
+	if (obj.getId() != null)
+	    update(obj);
+	else
+	    insert(obj);
     }
 }

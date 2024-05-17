@@ -17,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import model.entities.Department;
 import model.interfaces.IController;
 import model.services.DepartmentService;
@@ -51,7 +52,7 @@ public class DepartmentController implements IController {
 
 	    tb.prefHeightProperty().bind(MainViewManager.getStage().heightProperty());
 
-	    setDepartmentService(DepartmentService.getInstance());
+	    this.service = DepartmentService.getInstance();
 	    updateTb();
 	} catch (RuntimeException e) {
 	    AlertBuilder.type(AlertType.ERROR).title("Erro ao tentar carregar recurso").content(e.getMessage());
@@ -66,11 +67,13 @@ public class DepartmentController implements IController {
     private void loadFormWindow(Department dep) {
 	try {
 	    wm.windowModal("/gui/windows/DepartmentFormView.fxml", "Novo departamento");
+	    Stage window = wm.getWindow();
 
 	    DepartmentFormController controller = wm.getController();
 	    controller.setDepartment(dep);
+	    controller.setThisPage(window);
 
-	    wm.getWindow().showAndWait();
+	    window.showAndWait();
 	} catch (IOException e) {
 	    AlertBuilder.type(AlertType.ERROR).title("Erro ao tentar carregar recurso").content(e.getMessage());
 	}
@@ -78,16 +81,12 @@ public class DepartmentController implements IController {
 
     public void updateTb() {
 	if (service == null)
-	    throw new IllegalStateException("Service cannot be null");
+	    throw new NullPointerException("Service cannot be null");
 	setTbObs(service.findAll());
     }
 
     private void setTbObs(List<Department> all) {
 	obs = FXCollections.observableArrayList(all);
 	tb.setItems(obs);
-    }
-
-    private void setDepartmentService(DepartmentService service) {
-	this.service = service;
     }
 }

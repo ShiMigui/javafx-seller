@@ -3,16 +3,23 @@ package gui.windows;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import gui.utils.AlertBuilder;
 import gui.utils.TextfieldConstraint;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import model.entities.Department;
 import model.interfaces.IController;
+import model.services.DepartmentService;
 
 public class DepartmentFormController implements IController {
     private Department entity;
+    private DepartmentService service;
+
+    private Stage thisPage;
 
     @FXML
     private TextField txfId;
@@ -32,16 +39,24 @@ public class DepartmentFormController implements IController {
     public void initialize(URL url, ResourceBundle rs) {
 	TextfieldConstraint.getInstance(txfId).asIntegerText();
 	TextfieldConstraint.getInstance(txfName).maxLength(255);
+	this.service = DepartmentService.getInstance();
     }
 
     @FXML
     private void onBtnSalvarAction() {
-	System.out.println("Btn salvar click!");
+	try {
+	    entity.setName(txfName.getText());
+	    service.insertOrUpdate(entity);
+	    thisPage.close();
+	} catch (RuntimeException e) {
+	    lbl.setText("Ocorreu um erro ao salvar: " + e.getMessage());
+	    AlertBuilder.type(AlertType.ERROR).title("Error saving object").content(e.getMessage());
+	}
     }
 
     @FXML
     private void onBtnCancelarAction() {
-	System.out.println("Btn cancelar click!");
+	thisPage.close();
     }
 
     public void setDepartment(Department dep) {
@@ -55,5 +70,9 @@ public class DepartmentFormController implements IController {
 
 	txfId.setText(entity.getId() == null ? "" : String.valueOf(entity.getId()));
 	txfName.setText(entity.getName());
+    }
+
+    public void setThisPage(Stage thisPage) {
+	this.thisPage = thisPage;
     }
 }

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.function.Consumer;
 
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Region;
 import javafx.stage.Modality;
@@ -18,8 +17,7 @@ public class WindowManager {
     public void window(String relative, String name, Stage owner, Consumer<Stage> config) throws IOException {
 	loader = getLoader(relative);
 
-	Parent node = loader.load();
-	Scene scene = new Scene(node);
+	Scene scene = new Scene(loader.load());
 	window = new Stage();
 
 	window.setTitle(name);
