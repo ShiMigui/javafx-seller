@@ -13,4 +13,6 @@ public interface IEntityDao<E> {
     void update(E obj);
 
     List<E> findAll();
+
+    void remove(Integer id);
 }

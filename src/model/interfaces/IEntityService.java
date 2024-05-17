@@ -27,4 +27,18 @@ public interface IEntityService<E extends IEntity> {
 	else
 	    insert(obj);
     }
+
+    default void remove(E obj) {
+	if (obj == null)
+	    throw new NullPointerException("Id was null!");
+
+	remove(obj.getId());
+    }
+
+    default void remove(Integer id) {
+	if (id == null)
+	    throw new NullPointerException("Id was null!");
+
+	getEntityDao().remove(id);
+    }
 }

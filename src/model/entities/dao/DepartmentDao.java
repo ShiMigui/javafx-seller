@@ -58,9 +58,8 @@ public class DepartmentDao implements IEntityDao<Department> {
 	    st.setString(1, obj.getName());
 	    if (st.executeUpdate() > 0) {
 		rs = st.getGeneratedKeys();
-		if (rs.next()) {
+		if (rs.next())
 		    obj.setId(rs.getInt(1));
-		}
 	    } else {
 		throw new DatabaseIntegrityException("Unexpected error: No rows affected!");
 	    }
@@ -82,9 +81,8 @@ public class DepartmentDao implements IEntityDao<Department> {
 	    st.setString(1, obj.getName());
 	    st.setInt(2, obj.getId());
 
-	    if (st.executeUpdate() == 0) {
+	    if (st.executeUpdate() == 0)
 		throw new DatabaseIntegrityException("Unexpected error: No rows affected!");
-	    }
 	} catch (SQLException e) {
 	    throw new DatabaseIntegrityException("Cannot update Department(" + obj.getId() + "): " + e.getMessage());
 	} finally {
@@ -105,7 +103,22 @@ public class DepartmentDao implements IEntityDao<Department> {
 
 	    return list;
 	} catch (SQLException e) {
-	    throw new DatabaseIntegrityException("Cannot select add Departments: " + e.getMessage());
+	    throw new DatabaseIntegrityException("Cannot select departments: " + e.getMessage());
+	} finally {
+	    Database.close(st, rs);
+	}
+    }
+
+    @Override
+    public void remove(Integer id) {
+	try {
+	    st = con.prepareStatement("DELETE FROM department WHERE cd_department = ?;");
+	    st.setInt(1, id);
+
+	    if (st.executeUpdate() == 0)
+		throw new DatabaseIntegrityException("Unexpected error: No rows affected!");
+	} catch (SQLException e) {
+	    throw new DatabaseIntegrityException("Cannot delte department(" + id + "): " + e.getMessage());
 	} finally {
 	    Database.close(st, rs);
 	}
