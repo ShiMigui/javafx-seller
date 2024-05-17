@@ -1,6 +1,8 @@
 package gui.windows;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import gui.utils.AlertBuilder;
@@ -13,13 +15,14 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.entities.Department;
 import model.interfaces.IController;
+import model.interfaces.IDataChangeListener;
 import model.services.DepartmentService;
 
 public class DepartmentFormController implements IController {
+    private Stage thisPage;
     private Department entity;
     private DepartmentService service;
-
-    private Stage thisPage;
+    private List<IDataChangeListener> listeners = new ArrayList<>();
 
     @FXML
     private TextField txfId;
@@ -42,11 +45,20 @@ public class DepartmentFormController implements IController {
 	this.service = DepartmentService.getInstance();
     }
 
+    private void updateForm() {
+	if (entity == null)
+	    throw new NullPointerException("Entity cannot be null!");
+
+	txfId.setText(entity.getId() == null ? "" : String.valueOf(entity.getId()));
+	txfName.setText(entity.getName());
+    }
+
     @FXML
     private void onBtnSalvarAction() {
 	try {
 	    entity.setName(txfName.getText());
 	    service.insertOrUpdate(entity);
+	    listeners.forEach((i) -> i.dataChanged());
 	    thisPage.close();
 	} catch (RuntimeException e) {
 	    lbl.setText("Ocorreu um erro ao salvar: " + e.getMessage());
@@ -64,15 +76,11 @@ public class DepartmentFormController implements IController {
 	updateForm();
     }
 
-    private void updateForm() {
-	if (entity == null)
-	    throw new NullPointerException("Entity cannot be null!");
-
-	txfId.setText(entity.getId() == null ? "" : String.valueOf(entity.getId()));
-	txfName.setText(entity.getName());
-    }
-
     public void setThisPage(Stage thisPage) {
 	this.thisPage = thisPage;
+    }
+
+    public void subscribeListener(IDataChangeListener listener) {
+	listeners.add(listener);
     }
 }

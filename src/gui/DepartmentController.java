@@ -20,9 +20,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.entities.Department;
 import model.interfaces.IController;
+import model.interfaces.IDataChangeListener;
 import model.services.DepartmentService;
 
-public class DepartmentController implements IController {
+public class DepartmentController implements IController, IDataChangeListener {
     private DepartmentService service;
     private WindowManager wm = new WindowManager();
 
@@ -72,6 +73,7 @@ public class DepartmentController implements IController {
 	    DepartmentFormController controller = wm.getController();
 	    controller.setDepartment(dep);
 	    controller.setThisPage(window);
+	    controller.subscribeListener(this);
 
 	    window.showAndWait();
 	} catch (IOException e) {
@@ -88,5 +90,10 @@ public class DepartmentController implements IController {
     private void setTbObs(List<Department> all) {
 	obs = FXCollections.observableArrayList(all);
 	tb.setItems(obs);
+    }
+
+    @Override
+    public void dataChanged() {
+	updateTb();
     }
 }
