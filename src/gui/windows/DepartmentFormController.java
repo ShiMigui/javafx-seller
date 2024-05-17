@@ -14,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.entities.Department;
+import model.exceptions.ValidationException;
 import model.interfaces.IController;
 import model.interfaces.IDataChangeListener;
 import model.services.DepartmentService;
@@ -43,6 +44,8 @@ public class DepartmentFormController implements IController {
 	TextfieldConstraint.getInstance(txfId).asIntegerText();
 	TextfieldConstraint.getInstance(txfName).maxLength(255);
 	this.service = DepartmentService.getInstance();
+
+	btnSalvar.setDefaultButton(true);
     }
 
     private void updateForm() {
@@ -56,12 +59,18 @@ public class DepartmentFormController implements IController {
     @FXML
     private void onBtnSalvarAction() {
 	try {
+	    if (txfName.getText() == null || txfName.getText().trim().equals("")) {
+		txfName.requestFocus();
+		throw new ValidationException("Name cannot be empty.");
+	    }
+
 	    entity.setName(txfName.getText());
 	    service.insertOrUpdate(entity);
+
 	    listeners.forEach((i) -> i.dataChanged());
 	    thisPage.close();
 	} catch (RuntimeException e) {
-	    lbl.setText("Ocorreu um erro ao salvar: " + e.getMessage());
+	    lbl.setText(e.getMessage());
 	    AlertBuilder.type(AlertType.ERROR).title("Error saving object").content(e.getMessage());
 	}
     }
