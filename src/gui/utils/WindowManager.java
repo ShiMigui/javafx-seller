@@ -8,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import model.interfaces.IController;
 
 public class WindowManager {
     private Stage window;
@@ -42,7 +41,7 @@ public class WindowManager {
 	return new FXMLLoader(WindowManager.class.getResource(relative));
     }
 
-    public <C extends IController> C getController() {
+    public <C> C getController() {
 	return loader.getController();
     }
 

@@ -1,15 +1,11 @@
 package model.interfaces;
 
-public interface IEntity {
-    void setId(Integer id);
+import java.io.Serializable;
 
+public interface IEntity extends Serializable {
     Integer getId();
 
-    void setName(String name);
-
-    String getName();
-
     default String normalizeText(String text) {
-	return text.trim().replaceAll("\\s{2,}", " ").toUpperCase();
+	return text.trim().replaceAll("\\s{2,}", " ");
     }
 }

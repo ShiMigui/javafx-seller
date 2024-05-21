@@ -14,5 +14,5 @@ public interface IEntityDao<E> {
 
     List<E> findAll();
 
-    void remove(Integer id);
+    void removeById(Integer id);
 }

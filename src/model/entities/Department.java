@@ -1,11 +1,10 @@
 package model.entities;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 import model.interfaces.IEntity;
 
-public class Department implements IEntity, Serializable {
+public class Department implements IEntity {
     private static final long serialVersionUID = 1L;
 
     public Integer id;
@@ -24,17 +23,14 @@ public class Department implements IEntity, Serializable {
 	return id;
     }
 
-    @Override
     public void setId(Integer id) {
 	this.id = id;
     }
 
-    @Override
     public String getName() {
 	return name;
     }
 
-    @Override
     public void setName(String name) {
 	this.name = normalizeText(name);
     }

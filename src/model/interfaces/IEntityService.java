@@ -30,15 +30,15 @@ public interface IEntityService<E extends IEntity> {
 
     default void remove(E obj) {
 	if (obj == null)
-	    throw new NullPointerException("Id was null!");
+	    throw new NullPointerException("Obj was null!");
 
-	remove(obj.getId());
+	removeById(obj.getId());
     }
 
-    default void remove(Integer id) {
+    default void removeById(Integer id) {
 	if (id == null)
 	    throw new NullPointerException("Id was null!");
 
-	getEntityDao().remove(id);
+	getEntityDao().removeById(id);
     }
 }

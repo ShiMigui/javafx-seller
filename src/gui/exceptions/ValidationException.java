@@ -1,4 +1,4 @@
-package model.exceptions;
+package gui.exceptions;
 
 public class ValidationException extends RuntimeException {
     private static final long serialVersionUID = 1L;
