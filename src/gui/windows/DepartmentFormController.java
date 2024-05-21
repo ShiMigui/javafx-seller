@@ -15,11 +15,11 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.entities.Department;
 import model.exceptions.ValidationException;
-import model.interfaces.IController;
 import model.interfaces.IDataChangeListener;
+import model.interfaces.IEntityFormController;
 import model.services.DepartmentService;
 
-public class DepartmentFormController implements IController {
+public class DepartmentFormController implements IEntityFormController<Department> {
     private Stage thisPage;
     private Department entity;
     private DepartmentService service;
@@ -80,15 +80,20 @@ public class DepartmentFormController implements IController {
 	thisPage.close();
     }
 
-    public void setDepartment(Department dep) {
+    @Override
+    public void setReference(Department dep) {
+	if (dep == null)
+	    throw new NullPointerException("Department was null!");
 	this.entity = dep;
 	updateForm();
     }
 
-    public void setThisPage(Stage thisPage) {
+    @Override
+    public void setStage(Stage thisPage) {
 	this.thisPage = thisPage;
     }
 
+    @Override
     public void subscribeListener(IDataChangeListener listener) {
 	listeners.add(listener);
     }

@@ -5,12 +5,12 @@ import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 import gui.utils.AlertBuilder;
 import gui.utils.ConfirmationBuilder;
 import gui.utils.MainViewManager;
 import gui.utils.WindowManager;
-import gui.windows.DepartmentFormController;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,6 +26,7 @@ import javafx.stage.Stage;
 import model.entities.Department;
 import model.interfaces.IController;
 import model.interfaces.IDataChangeListener;
+import model.interfaces.IEntityFormController;
 import model.services.DepartmentService;
 
 public class DepartmentController implements IController, IDataChangeListener {
@@ -34,9 +35,6 @@ public class DepartmentController implements IController, IDataChangeListener {
 
     @FXML
     private Button btnNew;
-
-    @FXML
-    private Button btnUpdate;
 
     @FXML
     private TableView<Department> tb;
@@ -76,19 +74,14 @@ public class DepartmentController implements IController, IDataChangeListener {
 	loadFormWindow(new Department());
     }
 
-    @FXML
-    private void onBtnUpdateAction() {
-	updateTb();
-    }
-
     private void loadFormWindow(Department dep) {
 	try {
 	    wm.windowModal("/gui/windows/DepartmentFormView.fxml", "New departamento");
 	    Stage window = wm.getWindow();
 
-	    DepartmentFormController controller = wm.getController();
-	    controller.setDepartment(dep);
-	    controller.setThisPage(window);
+	    IEntityFormController<Department> controller = wm.getController();
+	    controller.setReference(dep);
+	    controller.setStage(window);
 	    controller.subscribeListener(this);
 
 	    window.showAndWait();
@@ -128,39 +121,31 @@ public class DepartmentController implements IController, IDataChangeListener {
 	}
     }
 
-    private void addEditButtons() {
-	tbColumnEdit.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
-	tbColumnEdit.setCellFactory(param -> new TableCell<Department, Department>() {
-	    private final Button button = new Button("edit");
+    private void addButtonToTableCell(TableColumn<Department, Department> column, String buttonText,
+	    Consumer<Department> action) {
+	column.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+	column.setCellFactory(param -> new TableCell<Department, Department>() {
+	    private final Button button = new Button(buttonText);
 
 	    @Override
 	    protected void updateItem(Department obj, boolean empty) {
 		super.updateItem(obj, empty);
-		if (obj == null) {
+		if (obj == null || empty) {
 		    setGraphic(null);
 		    return;
 		}
 		setGraphic(button);
-		button.setOnAction(event -> loadFormWindow(obj));
+		button.setOnAction(event -> action.accept(obj));
 	    }
 	});
+    }
+
+    private void addEditButtons() {
+	addButtonToTableCell(tbColumnEdit, "edit", this::loadFormWindow);
     }
 
     private void addRemoveButtons() {
-	tbColumnRemove.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
-	tbColumnRemove.setCellFactory(param -> new TableCell<Department, Department>() {
-	    private final Button button = new Button("remove");
-
-	    @Override
-	    protected void updateItem(Department obj, boolean empty) {
-		super.updateItem(obj, empty);
-		if (obj == null) {
-		    setGraphic(null);
-		    return;
-		}
-		setGraphic(button);
-		button.setOnAction(event -> removeEntity(obj));
-	    }
-	});
+	addButtonToTableCell(tbColumnRemove, "remove", this::removeEntity);
     }
+
 }

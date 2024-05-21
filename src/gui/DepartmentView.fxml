@@ -6,7 +6,6 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -25,12 +24,7 @@
       </Label>
       <ToolBar prefHeight="40.0" prefWidth="200.0">
         <items>
-            <HBox spacing="10.0">
-               <children>
-                  <Button fx:id="btnUpdate" mnemonicParsing="false" onAction="#onBtnUpdateAction" text="Update" />
-                <Button fx:id="btnNew" mnemonicParsing="false" onAction="#onBtnNewAction" text="New" />
-               </children>
-            </HBox>
+          <Button fx:id="btnNew" mnemonicParsing="false" onAction="#onBtnNewAction" text="New" />
         </items>
       </ToolBar>
       <TableView fx:id="tb" prefHeight="200.0" prefWidth="200.0">
